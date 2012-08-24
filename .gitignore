@@ -12,8 +12,5 @@ build
 *.la
 *.a
 
-# Input/Output file
-*.in
-*.out
 *~
 *.swp
