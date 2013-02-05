@@ -10,8 +10,13 @@ PROG:
 
 using namespace std;
 
-ofstream fout(PROG ".out");
-ifstream fin(PROG ".in");
+#ifdef DEBUG
+ostream& out = cout;
+istream& in  = cin;
+#else
+ofstream out(PROG ".out");
+ifstream in(PROG ".in");
+#endif
 
 int main()
 {

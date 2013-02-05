@@ -1,2 +1,3 @@
 #!/bin/bash
-g++ $1.cpp -o ../build/$1 -Wall -g
+g++ $1.cpp -o ../build/$1 -Wall -g -DDEBUG
+../build/$1

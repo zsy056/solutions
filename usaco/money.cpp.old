@@ -1,0 +1,64 @@
+/* 
+ID: zsy
+LANG: C++
+PROG: money 
+Run 8 TLE
+*/
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+
+#define PROG "money"
+
+const int NUM_COINS = 30;
+
+using namespace std;
+
+ofstream fout(PROG ".out");
+ifstream fin(PROG ".in");
+
+int value[NUM_COINS];
+int num[NUM_COINS] = { 0 };
+int v;
+int n;
+int tmp_sum = 0;
+
+inline bool next()
+{
+    bool flag = false;
+    for (int i=0; i<v; ++i) {
+        if (tmp_sum >= n) {
+            tmp_sum -= num[i] * value[i];
+            num[i] = 0;
+            continue;
+        } else {
+            ++num[i];
+            tmp_sum += value[i];
+            flag = true;
+            break;
+        }
+    }
+    return flag;
+}
+
+int main()
+{
+    fin >> v >> n;
+    for (int i=0; i<v; ++i) {
+         fin >> value[i];
+    }
+    sort(value, value+v);
+    num[0] = n / value[0];
+    tmp_sum = num[0] * value[0];
+
+    long long counter = 0;
+    do {
+        if (tmp_sum == n) {
+            ++counter;
+        }
+    } while (next());
+    fout << counter << endl;
+    return 0;
+}
