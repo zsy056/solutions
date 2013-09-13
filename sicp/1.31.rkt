@@ -1,0 +1,30 @@
+#!/usr/bin/env racket
+#lang racket
+
+(define (product-re a b factor next)
+  (if (> a b)
+    1
+    (* (factor a)
+       (product-re (next a) b factor next))))
+
+(define (product-it a b factor next)
+  (define (iter a result)
+    (if (> a b)
+      result
+      (iter (next a) (* result (factor a)))))
+  (iter a 1))
+
+(define (orig x) x)
+
+(define (inc x) (+ x 1))
+
+(define (factorial n product)
+  (product 1 n orig inc))
+
+(factorial 10 product-re)
+(factorial 10 product-it)
+
+(define (pi n)
+  (define (pi-imp)
+    )
+  (* 4 (pi-imp)))
