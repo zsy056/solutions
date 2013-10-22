@@ -1,0 +1,5 @@
+#!/bin/bash
+
+stub="_NAME"
+
+sed "s/${stub}/${1}/g" tmp.cpp > "${1}.cpp"

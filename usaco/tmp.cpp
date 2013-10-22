@@ -1,12 +1,12 @@
 /* 
 ID: zsy
 LANG: C++
-PROG: 
+PROG: _NAME 
 */
 #include <iostream>
 #include <fstream>
 
-#define PROG ""
+#define PROG "_NAME"
 
 using namespace std;
 
