@@ -54,12 +54,12 @@ num_studens = 0
 n.times do |i| 
   m = inputs[curr_line].to_i
   curr_line += 1
+  num_studens += m
   students = Array.new m
   m.times do |j|
     line = inputs[curr_line].split ' '
     curr_line += 1
     students[j] = Student.new(line[0], line[1].to_i, i+1)
-    num_studens += 1
   end
   locations[i] = students 
 end
