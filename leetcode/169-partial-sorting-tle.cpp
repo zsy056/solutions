@@ -27,6 +27,7 @@ void my_nth_impl_random_it(Iterator first, Iterator nth, Iterator last) {
             first = first + i;
         }
         size = last - first;
+        cout << size << endl;
         n = nth - first;
     }
 }
