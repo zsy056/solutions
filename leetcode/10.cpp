@@ -110,14 +110,14 @@ public:
 int main()
 {
     Solution s;
-    assert(s.isMatch("aa", "a") == false);
+    assert(!s.isMatch("aa", "a"));
     assert(s.isMatch("aa", "aa"));
-    assert(s.isMatch("aaa", "aa") == false);
+    assert(!s.isMatch("aaa", "aa"));
     assert(s.isMatch("aa", "a*"));
     assert(s.isMatch("aa", ".*"));
     assert(s.isMatch("ab", ".*"));
     assert(s.isMatch("aab", "c*a*b"));
     assert(s.isMatch("abb", "a*bb"));
-    assert(s.isMatch("ab", "a*bb") == false);
+    assert(!s.isMatch("ab", "a*bb"));
     return 0;
 }
