@@ -4,6 +4,8 @@ Given a collection of numbers that might contain duplicates, return all possible
 For example,
 [1,1,2] have the following unique permutations:
 [1,1,2], [1,2,1], and [2,1,1].
+
+40 ms
 */
 #include <iostream>
 #include <vector>
@@ -16,30 +18,30 @@ class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         sort(nums.begin(), nums.end());
-        return permute(nums, 0);
+        vector<bool> used(nums.size(), false);
+        vector<vector<int>> result;
+        vector<int> num;
+        permute(result, nums, num, used);
+        return result;
     }
 private:
-    vector<vector<int>> permute(vector<int> &num, int begin) {
-        if (begin == num.size()) {
-            return vector<vector<int>>{vector<int>()};
+    void permute(vector<vector<int>> &result, const vector<int> nums, vector<int> &num, vector<bool> &used) {
+        if (num.size() == nums.size()) {
+            result.push_back(num);
+            return;
         }
-        vector<vector<int>> result;
-        unordered_set<int> tried;
-        for (int i=begin; i<num.size(); ++i) {
-            if (tried.count(num[i]) != 0) {
-                continue;
-            } else {
-                tried.insert(num[i]);
+        for (int i=0; i<nums.size(); ++i) {
+            if (!used[i]) {
+                if (i > 0 && nums[i] == nums[i-1] && !used[i-1]) {
+                    continue;
+                }
+                used[i] = true;
+                num.push_back(nums[i]);
+                permute(result, nums, num, used);
+                num.pop_back();
+                used[i] = false;
             }
-            swap(num[begin], num[i]);
-            auto prefixes = permute(num, begin+1);
-            for (auto &prefix : prefixes) {
-                prefix.push_back(num[begin]);
-                result.push_back(move(prefix));
-            }
-            swap(num[begin], num[i]);
         }
-        return result;
     }
 };
 
