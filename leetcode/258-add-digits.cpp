@@ -9,13 +9,17 @@ Follow up:
 Could you do it without any loop/recursion in O(1) runtime?
 */
 
+/**
+ * 0123456789123456789123456789...
+ */
+
 class Solution {
 public:
     int addDigits(int num) {
-        if (num < 10) {
-            return num;
+        if (num == 0) {
+            return 0;
         }
-        auto rem = num % 9;
-        return rem == 0 ? 9 : rem;
+        auto r = num % 9;
+        return r == 0 ? 9 : r;
     }
 };
