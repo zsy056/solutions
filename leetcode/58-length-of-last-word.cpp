@@ -16,9 +16,9 @@ public:
         auto begin(false);
         auto counter(0);
         for (int i(s.length() - 1); i >= 0; --i) {
-            if (!begin && s[i] == ' ') {
+            if (!begin && isspace(s[i])) {
                 continue;
-            } else if (s[i] == ' ') {
+            } else if (isspace(s[i])) {
                 break;
             } else {
                 begin = true;
