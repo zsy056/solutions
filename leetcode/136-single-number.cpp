@@ -8,10 +8,6 @@ Your algorithm should have a linear runtime complexity. Could you implement it w
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        int x(0);
-        for (auto i : nums) {
-            x = x ^ i;
-        }
-        return x;
+        return accumulate(nums.begin(), nums.end(), 0, [](int a, int b) { return a ^ b; });
     }
 };
