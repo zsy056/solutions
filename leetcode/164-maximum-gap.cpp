@@ -13,27 +13,27 @@ public:
         if (nums.size() < 2) {
             return 0;
         }
-        auto smaller = shared_ptr<list<int> >(new list<int>());
-        auto larger = shared_ptr<list<int> >(new list<int>());
-        auto total = shared_ptr<list<int> >(new list<int>(nums.begin(), nums.end()));
+        list<int> smaller;
+        list<int> larger;
+        list<int> total(nums.begin(), nums.end());
         for (auto i=0; i<31; ++i) {
-            for (auto j=total->begin(); j != total->end(); ++j) {
+            for (auto j=total.begin(); j != total.end(); ++j) {
                 if (((*j >> i) & 1) == 0) {
-                    smaller->push_back(*j);
+                    smaller.push_back(*j);
                 } else {
-                    larger->push_back(*j);
+                    larger.push_back(*j);
                 }
             }
-            smaller->splice(smaller->end(), *larger);
+            smaller.splice(smaller.end(), larger);
             swap(smaller, total);
-            smaller->clear();
-            larger->clear();
+            smaller.clear();
+            larger.clear();
         }
         int max_gap = 0;
-        for (auto i=total->begin(); i!=total->end();) {
+        for (auto i=total.begin(); i!=total.end();) {
             auto a = *i;
             ++i;
-            if (i == total->end()) {
+            if (i == total.end()) {
                 break;
             }
             auto b = *i;
