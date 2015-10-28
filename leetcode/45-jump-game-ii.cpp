@@ -19,7 +19,7 @@ using namespace std;
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        vector<int> bounds(nums.size(), 0);
+        vector<int> bounds(nums.size(), 0); // bounds[step] -> reach
         int min_step = 0;
         for (int i=0; i<nums.size(); ++i) {
             int curr_step = get_step(bounds, min_step, i);
