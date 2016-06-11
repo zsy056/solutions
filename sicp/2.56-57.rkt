@@ -14,37 +14,52 @@
 (not (same-variable? 1 'a))
 (not (same-variable? 1 1))
 
+
+(define (=number? a b)
+        (and (number? a) (number? b) (eq? a b)))
+
+(define (one-item? a)
+        (and (pair? a) (null? (cdr a))))
+
+(define (make-sum . as)
+        (let ((number-part (apply + (filter (lambda (x) (number? x)) as)))
+              (var-part (filter (lambda (x) (not (number? x))) as)))
+             (cond ((null? var-part) number-part)
+                   ((and (one-item? var-part) (eq? 0 number-part)) (car var-part))
+                   ((eq? 0 number-part) (cons '+ var-part))
+                   (else (cons '+ (cons number-part var-part))))))
+
 (define (sum? e)
         (and (pair? e) (eq? '+ (car e))))
 
-(sum? '(+ a b))
-(not (sum? '(- a b)))
+(sum? (make-sum 'a 'b))
 
 (define (addend e) (cadr e))
 
 (eq? 'a (addend '(+ a b)))
 (not (eq? 'a (addend '(+ b a))))
 
-(define (augend e) (caddr e))
+(define (augend e) (apply make-sum (cddr e)))
 
 (eq? 'a (augend '(+ b a)))
 (not (eq? 'a (augend '(+ a b))))
 
-(define (=number? a b)
-        (and (number? a) (number? b) (eq? a b)))
-
-(define (make-sum a1 a2)
-        (cond ((and (=number? a1 0) (=number? a2 0)) 0)
-              ((=number? a1 0) a2)
-              ((=number? a2 0) a1)
-              ((and (number? a1) (number? a2)) (+ a1 a2))
-              (else (list '+ a1 a2))))
-
-(sum? (make-sum 'a 'b))
 (eq? 'a (addend (make-sum 'a 'b)))
 (eq? 'a (make-sum 'a 0))
 (eq? 0 (make-sum 0 0))
 (eq? 'a (make-sum 0 'a))
+
+(sum? '(+ a b))
+(not (sum? '(- a b)))
+
+(define (make-product . as)
+        (let ((number-part (apply * (filter (lambda (x) (number? x)) as)))
+              (var-part (filter (lambda (x) (not (number? x))) as)))
+             (cond ((eq? 0 number-part) 0)
+                   ((null? var-part) number-part)
+                   ((and (one-item? var-part) (eq? 1 number-part)) (car var-part))
+                   ((eq? number-part 1) (cons '* var-part))
+                   (else (cons '* (cons number-part var-part))))))
 
 (define (product? e)
         (and (pair? e) (eq? (car e) '*)))
@@ -57,19 +72,10 @@
 (eq? 'a (multiplier '(* a b)))
 (not (eq? 'a (multiplier '(* b a))))
 
-(define (multiplicand e) (caddr e))
+(define (multiplicand e) (apply make-product (cddr e)))
 
 (eq? 'a (multiplicand '(* b a)))
 (not (eq? 'a (multiplicand '(* a b))))
-
-(define (make-product a b)
-        (cond ((or (=number? a 0) (=number? b 0)) 0)
-              ((=number? a 1) b)
-              ((=number? b 1) a)
-              ((and (number? a) (number? b)) (* a b))
-              (else (list '* a b))))
-
-(define (exponentiation? e) (eq? '^ (car e)))
 
 (define (make-exponentiation b e)
         (cond ((=number? e 1) b)
@@ -78,6 +84,8 @@
               ((=number? b 1) 1)
               ((and (number? b) (number? e)) (expt b e))
               (else (list '^ b e))))
+
+(define (exponentiation? e) (eq? '^ (car e)))
 
 (exponentiation? (make-exponentiation 'a 'b))
 (exponentiation? '(^ a b))
@@ -112,8 +120,8 @@
          (let ((ba (base e))
                (ex (exponent e)))
               (make-product ex
-                            (make-product (make-exponentiation ba (make-sum ex -1))
-                                          (deriv ba var)))))
+                            (make-exponentiation ba (make-sum ex -1))
+                            (deriv ba var))))
         (else (error "unknown expression type -- DERIV" exp))))
 
 (equal? 1 (deriv '(+ x 3) 'x))
@@ -131,3 +139,10 @@
 
 (equal? '(* 2 (* 2 x))
         (deriv '(* 2 (^ x 2)) 'x))
+
+; 2.57
+
+(equal? '(+ (* x y) (* y (+ x 3)))
+        (deriv '(* x y (+ x 3)) 'x))
+
+
